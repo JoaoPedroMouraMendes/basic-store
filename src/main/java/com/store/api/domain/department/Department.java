@@ -8,7 +8,7 @@ import lombok.*;
 
 import java.util.UUID;
 
-@Table(name = "departmentt ")
+@Table(name = "department")
 @Entity
 @EqualsAndHashCode(of = "id")
 @Getter
