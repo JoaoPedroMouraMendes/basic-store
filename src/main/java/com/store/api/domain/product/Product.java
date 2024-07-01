@@ -6,7 +6,7 @@ import lombok.*;
 import java.util.UUID;
 
 @Table(name = "product")
-@Entity
+@Entity(name = "product")
 @EqualsAndHashCode(of = "id")
 @Getter
 @Setter

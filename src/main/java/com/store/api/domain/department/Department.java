@@ -9,7 +9,7 @@ import lombok.*;
 import java.util.UUID;
 
 @Table(name = "department")
-@Entity
+@Entity(name = "department")
 @EqualsAndHashCode(of = "id")
 @Getter
 @Setter
@@ -21,4 +21,8 @@ public class Department {
     private UUID id;
 
     private String name;
+
+    public Department(RequestDepartment requestDepartment) {
+        this.name = requestDepartment.name();
+    }
 }
