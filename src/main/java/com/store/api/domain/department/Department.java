@@ -22,7 +22,7 @@ public class Department {
 
     private String name;
 
-    public Department(RequestDepartment requestDepartment) {
+    public Department(PostRequestDepartment requestDepartment) {
         this.name = requestDepartment.name();
     }
 }

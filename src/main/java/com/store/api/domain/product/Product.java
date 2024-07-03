@@ -21,6 +21,6 @@ public class Product {
     private Integer price_in_cents;
 
     @ManyToOne
-    @JoinColumn(name = "session_id")
+    @JoinColumn(name = "department_id")
     private Product product;
 }
