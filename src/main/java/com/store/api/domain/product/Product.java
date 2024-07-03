@@ -1,5 +1,6 @@
 package com.store.api.domain.product;
 
+import com.store.api.domain.department.Department;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -22,5 +23,5 @@ public class Product {
 
     @ManyToOne
     @JoinColumn(name = "department_id")
-    private Product product;
+    private Department department;
 }
