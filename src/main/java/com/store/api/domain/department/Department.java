@@ -1,9 +1,8 @@
 package com.store.api.domain.department;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.store.api.domain.product.Product;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
