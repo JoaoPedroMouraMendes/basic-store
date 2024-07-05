@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.util.UUID;
 
-public record PostRequestProduct(
+public record PutRequestProduct(
         @NotBlank
         String name,
         @NotNull
