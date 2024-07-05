@@ -6,6 +6,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @Table(name = "department")
@@ -21,6 +22,10 @@ public class Department {
     private UUID id;
 
     private String name;
+
+    @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Product> products;
 
     public Department(PostRequestDepartment requestDepartment) {
         this.name = requestDepartment.name();
