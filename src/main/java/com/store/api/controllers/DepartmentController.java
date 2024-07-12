@@ -15,8 +15,6 @@ import java.util.UUID;
 public class DepartmentController {
 
     @Autowired
-    private DepartmentRepository repository;
-    @Autowired
     private DepartmentService departmentService;
 
     @GetMapping
