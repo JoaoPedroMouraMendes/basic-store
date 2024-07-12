@@ -1,9 +1,6 @@
 package com.store.api.controllers;
 
-import com.store.api.domain.department.Department;
-import com.store.api.domain.department.DepartmentRepository;
-import com.store.api.domain.department.PostRequestDepartment;
-import com.store.api.domain.department.PutRequestDepartment;
+import com.store.api.domain.department.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,16 +16,18 @@ public class DepartmentController {
 
     @Autowired
     private DepartmentRepository repository;
+    @Autowired
+    private DepartmentService departmentService;
 
     @GetMapping
     public ResponseEntity getAllDepartments() {
-        var allDepartments = repository.findAll();
+        var allDepartments = departmentService.getAllDepartments();
         return ResponseEntity.ok(allDepartments);
     }
 
     @PostMapping
     public ResponseEntity createDepartment(@RequestBody @Validated PostRequestDepartment data) {
-        repository.save(new Department(data));
+        departmentService.createDepartment(data);
         return ResponseEntity.ok().build();
     }
 
@@ -37,28 +36,19 @@ public class DepartmentController {
     public ResponseEntity updateDepartment(
             @PathVariable UUID id,
             @RequestBody @Validated PutRequestDepartment data) {
-        // Busca o objeto no banco de dados
-        Optional<Department> optionalDepartment = repository.findById(id);
-        // Valida se o objeto foi encontrado
-        if (optionalDepartment.isPresent()) {
-            Department department = optionalDepartment.get();
-            department.setName(data.name());
+        var department = departmentService.updateDepartment(id, data);
+
+        if (department != null)
             return ResponseEntity.ok(department);
-        }
 
         return ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity deleteDepartment(@PathVariable UUID id) {
-        // Busca o objeto no banco de dados
-        Optional<Department> optionalDepartment = repository.findById(id);
-        if (optionalDepartment.isPresent()) {
-            Department department = optionalDepartment.get();
-            repository.delete(department);
+        if (departmentService.deleteDepartment(id)) {
             return ResponseEntity.ok().build();
         }
-
         return ResponseEntity.notFound().build();
     }
 }
