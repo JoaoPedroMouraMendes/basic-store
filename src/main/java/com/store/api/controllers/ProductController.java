@@ -2,11 +2,9 @@ package com.store.api.controllers;
 
 import com.store.api.domain.department.Department;
 import com.store.api.domain.department.DepartmentRepository;
-import com.store.api.domain.product.PostRequestProduct;
-import com.store.api.domain.product.Product;
-import com.store.api.domain.product.ProductRepository;
-import com.store.api.domain.product.PutRequestProduct;
+import com.store.api.domain.product.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
@@ -24,23 +22,21 @@ public class ProductController {
     private ProductRepository productRepository;
     @Autowired
     private DepartmentRepository departmentRepository;
+    @Autowired
+    private ProductService productService;
 
     @GetMapping
     public ResponseEntity getAllProducts() {
-        List<Product> allProducts = productRepository.findAll();
+        List<Product> allProducts = productService.getAllProducts();
         return ResponseEntity.ok(allProducts);
     }
 
     @PostMapping
     public ResponseEntity createProduct(@RequestBody @Validated PostRequestProduct data) {
-        // Busca o objeto no banco de dados
-        Optional<Department> optionalDepartment = departmentRepository.findById(data.department_id());
-        // Valida se o objeto foi encontrado
-        if (optionalDepartment.isPresent()) {
-            Department department = optionalDepartment.get();
-            productRepository.save(new Product(data, department));
+        Product newProduct = productService.createProduct(data);
 
-            return ResponseEntity.ok().build();
+        if (newProduct != null) {
+            return ResponseEntity.status(HttpStatus.CREATED).build();
         }
 
         return ResponseEntity.notFound().build();
@@ -51,19 +47,10 @@ public class ProductController {
     public ResponseEntity updateProduct(
             @PathVariable UUID id,
             @RequestBody @Validated PutRequestProduct data) {
-        // Busca o objeto no banco de dados
-        Optional<Product> optionalProduct = productRepository.findById(id);
-        Optional<Department> optionalDepartment = departmentRepository.findById(data.department_id());
-        // Valida se o objeto foi encontrado
-        if (optionalProduct.isPresent() && optionalDepartment.isPresent()) {
-            Product product = optionalProduct.get();
-            Department department = optionalDepartment.get();
+        Product updatedProduct = productService.updateProduct(id, data);
 
-            product.setName(data.name());
-            product.setPrice_in_cents(data.price_in_cents());
-            product.setDepartment(department);
-
-            return ResponseEntity.ok(product);
+        if (updatedProduct != null) {
+            return ResponseEntity.ok(updatedProduct);
         }
 
         return ResponseEntity.notFound().build();
@@ -71,11 +58,7 @@ public class ProductController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity deleteProduct(@PathVariable UUID id) {
-        Optional<Product> optionalProduct = productRepository.findById(id);
-        if (optionalProduct.isPresent()) {
-            Product product = optionalProduct.get();
-            productRepository.delete(product);
-
+        if (productService.deleteProduct(id)) {
             return ResponseEntity.ok().build();
         }
 
