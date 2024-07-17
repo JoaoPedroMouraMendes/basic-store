@@ -40,15 +40,20 @@ public class ProductService {
     public Product updateProduct(UUID id, PutRequestProduct data) {
         // Busca o objeto no banco de dados
         Optional<Product> optionalProduct = productRepository.findById(id);
-        Optional<Department> optionalDepartment = departmentRepository.findById(data.department_id());
-        // Valida se o objeto foi encontrado
-        if (optionalProduct.isPresent() && optionalDepartment.isPresent()) {
-            Product product = optionalProduct.get();
-            Department department = optionalDepartment.get();
 
-            product.setName(data.name());
-            product.setPrice_in_cents(data.price_in_cents());
-            product.setDepartment(department);
+        // Valida se o objeto foi encontrado
+        if (optionalProduct.isPresent()) {
+            Product product = optionalProduct.get();
+
+            if (data.department_id() != null) {
+                Optional<Department> optionalDepartment = departmentRepository.findById(data.department_id());
+                if (optionalDepartment.isEmpty()) return null;
+                Department department = optionalDepartment.get();
+                product.setDepartment(department);
+            }
+
+            if (data.name() != null) product.setName(data.name());
+            if (data.price_in_cents() != null) product.setPrice_in_cents(data.price_in_cents());
 
             return product;
         }

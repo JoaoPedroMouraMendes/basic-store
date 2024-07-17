@@ -6,10 +6,12 @@ import jakarta.validation.constraints.NotNull;
 import java.util.UUID;
 
 public record PutRequestProduct(
-        @NotBlank
         String name,
-        @NotNull
         Integer price_in_cents,
-        @NotNull
         UUID department_id
-) { }
+) {
+        public PutRequestProduct {
+                if (name == null && price_in_cents == null && department_id == null)
+                        throw new IllegalArgumentException("Pelo menos um campo deve ser preenchido");
+        }
+}
