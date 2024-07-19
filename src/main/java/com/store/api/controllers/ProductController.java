@@ -3,6 +3,7 @@ package com.store.api.controllers;
 import com.store.api.domain.department.Department;
 import com.store.api.domain.department.DepartmentRepository;
 import com.store.api.domain.product.*;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,7 +40,7 @@ public class ProductController {
             return ResponseEntity.status(HttpStatus.CREATED).build();
         }
 
-        return ResponseEntity.notFound().build();
+        throw new EntityNotFoundException();
     }
 
     @PutMapping("/{id}")
@@ -52,8 +53,7 @@ public class ProductController {
         if (updatedProduct != null) {
             return ResponseEntity.ok(updatedProduct);
         }
-
-        return ResponseEntity.notFound().build();
+        throw new EntityNotFoundException();
     }
 
     @DeleteMapping("/{id}")
@@ -61,7 +61,6 @@ public class ProductController {
         if (productService.deleteProduct(id)) {
             return ResponseEntity.ok().build();
         }
-
-        return ResponseEntity.notFound().build();
+        throw new EntityNotFoundException();
     }
 }

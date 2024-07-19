@@ -1,6 +1,7 @@
 package com.store.api.controllers;
 
 import com.store.api.domain.department.*;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,12 +35,12 @@ public class DepartmentController {
     public ResponseEntity updateDepartment(
             @PathVariable UUID id,
             @RequestBody @Validated PutRequestDepartment data) {
+        System.out.println(1);
         var department = departmentService.updateDepartment(id, data);
-
         if (department != null)
             return ResponseEntity.ok(department);
-
-        return ResponseEntity.notFound().build();
+        System.out.println(2);
+        throw new EntityNotFoundException();
     }
 
     @DeleteMapping("/{id}")
@@ -47,6 +48,6 @@ public class DepartmentController {
         if (departmentService.deleteDepartment(id)) {
             return ResponseEntity.ok().build();
         }
-        return ResponseEntity.notFound().build();
+        throw new EntityNotFoundException();
     }
 }
