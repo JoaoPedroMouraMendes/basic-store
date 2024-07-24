@@ -1,6 +1,5 @@
 package com.store.api.controllers;
 
-import com.store.api.domain.department.Department;
 import com.store.api.domain.department.DepartmentRepository;
 import com.store.api.domain.product.*;
 import jakarta.persistence.EntityNotFoundException;
@@ -12,7 +11,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @RestController
