@@ -3,6 +3,7 @@ package com.store.api.controllers;
 import com.store.api.domain.department.*;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
@@ -27,7 +28,7 @@ public class DepartmentController {
     @PostMapping
     public ResponseEntity createDepartment(@RequestBody @Validated PostRequestDepartment data) {
         departmentService.createDepartment(data);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PutMapping("/{id}")
@@ -35,11 +36,10 @@ public class DepartmentController {
     public ResponseEntity updateDepartment(
             @PathVariable UUID id,
             @RequestBody @Validated PutRequestDepartment data) {
-        System.out.println(1);
         var department = departmentService.updateDepartment(id, data);
         if (department != null)
             return ResponseEntity.ok(department);
-        System.out.println(2);
+
         throw new EntityNotFoundException();
     }
 
